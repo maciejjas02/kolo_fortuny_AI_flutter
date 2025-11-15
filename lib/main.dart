@@ -296,6 +296,8 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    
     return Scaffold(
       body: AnimatedBuilder(
         animation: _backgroundController,
@@ -317,10 +319,21 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
           );
         },
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Column(
+          child: isMobile 
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: _buildContent(),
+                ),
+              )
+            : Center(child: _buildContent()),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -625,11 +638,6 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
                   ),
                 ),
             ],
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
