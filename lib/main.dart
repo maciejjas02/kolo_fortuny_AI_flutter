@@ -316,8 +316,12 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
             child: child,
           );
         },
-        child: Center(
-          child: Column(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -622,6 +626,9 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
                   ),
                 ),
             ],
+          ),
+              ),
+            ),
           ),
         ),
       ),
