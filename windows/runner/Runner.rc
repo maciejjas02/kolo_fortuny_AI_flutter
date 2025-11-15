@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "moj_prosty_projekt" "\0"
+            VALUE "FileDescription", "Koło Fortuny" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "moj_prosty_projekt" "\0"
+            VALUE "InternalName", "kolo_fortuny" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "moj_prosty_projekt.exe" "\0"
-            VALUE "ProductName", "moj_prosty_projekt" "\0"
+            VALUE "OriginalFilename", "kolo_fortuny.exe" "\0"
+            VALUE "ProductName", "Koło Fortuny" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

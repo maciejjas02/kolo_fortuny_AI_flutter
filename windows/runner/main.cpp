@@ -27,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"moj_prosty_projekt", origin, size)) {
+  if (!window.Create(L"Koło Fortuny", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
