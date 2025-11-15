@@ -407,94 +407,198 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
               
               const SizedBox(height: 50),
               
-              // Przyciski
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Przycisk AI Chat
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.85,
-                          child: AiChatPanel(
-                            lastResult: _selectedOption,
+              // Przyciski - responsywne
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isMobile = constraints.maxWidth < 600;
+                  
+                  if (isMobile) {
+                    // Układ pionowy dla telefonów
+                    return Column(
+                      children: [
+                        // Przycisk START (największy, na górze)
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: ElevatedButton(
+                            onPressed: _isSpinning ? null : _spinWheel,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow.shade700,
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                              ),
+                              textStyle: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              elevation: 10,
+                            ),
+                            child: Text(_isSpinning ? 'KRĘCI...' : 'START'),
                           ),
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.chat),
-                    label: const Text('AI CHAT'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple.shade700,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 15,
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 10,
-                    ),
-                  ),
-                  
-                  const SizedBox(width: 15),
-                  
-                  // Przycisk EDYTUJ
-                  ElevatedButton.icon(
-                    onPressed: _isSpinning ? null : _showEditDialog,
-                    icon: const Icon(Icons.edit),
-                    label: const Text('EDYTUJ'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade700,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 15,
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 10,
-                    ),
-                  ),
-                  
-                  const SizedBox(width: 15),
-                  
-                  // Przycisk START
-                  ElevatedButton(
-                    onPressed: _isSpinning ? null : _spinWheel,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow.shade700,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 60,
-                        vertical: 20,
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 10,
-                    ),
-                    child: Text(_isSpinning ? 'KRĘCI SIĘ...' : 'START'),
-                  ),
-                ],
+                        
+                        const SizedBox(height: 15),
+                        
+                        // Przyciski pomocnicze w rzędzie
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => SizedBox(
+                                    height: MediaQuery.of(context).size.height * 0.85,
+                                    child: AiChatPanel(
+                                      lastResult: _selectedOption,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.chat, size: 18),
+                              label: const Text('AI'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.purple.shade700,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 12,
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                elevation: 8,
+                              ),
+                            ),
+                            
+                            const SizedBox(width: 15),
+                            
+                            ElevatedButton.icon(
+                              onPressed: _isSpinning ? null : _showEditDialog,
+                              icon: const Icon(Icons.edit, size: 18),
+                              label: const Text('EDYTUJ'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.shade700,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 12,
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                elevation: 8,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    // Układ poziomy dla desktop
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Przycisk AI Chat
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.85,
+                                child: AiChatPanel(
+                                  lastResult: _selectedOption,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.chat),
+                          label: const Text('AI CHAT'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple.shade700,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 15,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 10,
+                          ),
+                        ),
+                        
+                        const SizedBox(width: 15),
+                        
+                        // Przycisk EDYTUJ
+                        ElevatedButton.icon(
+                          onPressed: _isSpinning ? null : _showEditDialog,
+                          icon: const Icon(Icons.edit),
+                          label: const Text('EDYTUJ'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 25,
+                              vertical: 15,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 10,
+                          ),
+                        ),
+                        
+                        const SizedBox(width: 15),
+                        
+                        // Przycisk START
+                        ElevatedButton(
+                          onPressed: _isSpinning ? null : _spinWheel,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.yellow.shade700,
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 60,
+                              vertical: 20,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            elevation: 10,
+                          ),
+                          child: Text(_isSpinning ? 'KRĘCI SIĘ...' : 'START'),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
               
               const SizedBox(height: 30),
