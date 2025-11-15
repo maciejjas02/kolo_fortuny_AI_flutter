@@ -77,7 +77,6 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
   
   bool _isSpinning = false;
   String? _selectedOption;
-  String? _groqApiKey;
 
   @override
   void initState() {
@@ -295,88 +294,6 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
     );
   }
 
-  void _showApiKeyDialog() {
-    final controller = TextEditingController(text: _groqApiKey ?? '');
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey.shade900,
-        title: const Text(
-          '⚙️ USTAWIENIA API',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Klucz API Groq:',
-              style: TextStyle(color: Colors.white70, fontSize: 14),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: controller,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Wklej klucz API...',
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              'Jak uzyskać klucz?\n'
-              '1. Zarejestruj się na:\n   console.groq.com\n'
-              '2. Stwórz API Key\n'
-              '3. Skopiuj i wklej tutaj',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('ANULUJ'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _groqApiKey = controller.text.trim();
-              });
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    _groqApiKey!.isEmpty 
-                      ? 'Klucz API usunięty' 
-                      : 'Klucz API zapisany! ✓'
-                  ),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('ZAPISZ'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -494,31 +411,6 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Przycisk Ustawienia
-                  ElevatedButton.icon(
-                    onPressed: _showApiKeyDialog,
-                    icon: const Icon(Icons.settings),
-                    label: const Text('API'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey.shade700,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 15,
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      elevation: 10,
-                    ),
-                  ),
-                  
-                  const SizedBox(width: 15),
-                  
                   // Przycisk AI Chat
                   ElevatedButton.icon(
                     onPressed: () {
@@ -530,7 +422,6 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
                           height: MediaQuery.of(context).size.height * 0.85,
                           child: AiChatPanel(
                             lastResult: _selectedOption,
-                            apiKey: _groqApiKey,
                           ),
                         ),
                       );

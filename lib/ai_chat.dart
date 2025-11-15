@@ -11,9 +11,8 @@ class ChatMessage {
 
 class AiChatPanel extends StatefulWidget {
   final String? lastResult;
-  final String? apiKey;
   
-  const AiChatPanel({super.key, this.lastResult, this.apiKey});
+  const AiChatPanel({super.key, this.lastResult});
 
   @override
   State<AiChatPanel> createState() => _AiChatPanelState();
@@ -24,24 +23,27 @@ class _AiChatPanelState extends State<AiChatPanel> {
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
+  
+  // Klucz API zakodowany (XOR + Base64)
+  String get _getApiKey {
+    // Zakodowany klucz - dekodowanie w runtime
+    const encoded = 'ZmRoXjdFalAxM1RCR0luUVBBeTE4dldJRmJ2YjJGWFFyR0l6S0RFb1FUUExRSmVxdDNnRWQ3Nw==';
+    const xorKey = 42; // Klucz XOR
+    
+    try {
+      final decoded = utf8.decode(base64.decode(encoded));
+      final result = String.fromCharCodes(
+        decoded.codeUnits.map((c) => c ^ xorKey)
+      );
+      return result;
+    } catch (e) {
+      return '';
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    
-    // Sprawdź czy jest klucz API
-    if (widget.apiKey == null || widget.apiKey!.isEmpty) {
-      _addMessage(
-        '⚠️ Nie ustawiono klucza API Groq!\n\n'
-        'Aby używać AI chatbota:\n'
-        '1. Zarejestruj się na https://console.groq.com\n'
-        '2. Stwórz klucz API\n'
-        '3. Kliknij ikonę ⚙️ w głównym menu i wklej klucz\n\n'
-        'Na razie używam prostych odpowiedzi! 😊',
-        isUser: false,
-      );
-      return;
-    }
     
     if (widget.lastResult != null) {
       _addMessage(
@@ -101,14 +103,9 @@ class _AiChatPanelState extends State<AiChatPanel> {
   }
 
   Future<String> _getAiResponse(String userMessage) async {
-    // Sprawdź czy jest klucz API
-    if (widget.apiKey == null || widget.apiKey!.isEmpty) {
-      return _getSimpleResponse(userMessage);
-    }
-    
     // Używamy Groq API - super szybki!
     const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-    final apiKey = widget.apiKey!;
+    final apiKey = _getApiKey;
     
     // Budujemy kontekst z historią
     final messages = [
