@@ -23,23 +23,6 @@ class _AiChatPanelState extends State<AiChatPanel> {
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
-  
-  // Klucz API zakodowany (XOR + Base64)
-  String get _getApiKey {
-    // Zakodowany klucz - dekodowanie w runtime
-    const encoded = 'ZmRoXjdFalAxM1RCR0luUVBBeTE4dldJRmJ2YjJGWFFyR0l6S0RFb1FUUExRSmVxdDNnRWQ3Nw==';
-    const xorKey = 42; // Klucz XOR
-    
-    try {
-      final decoded = utf8.decode(base64.decode(encoded));
-      final result = String.fromCharCodes(
-        decoded.codeUnits.map((c) => c ^ xorKey)
-      );
-      return result;
-    } catch (e) {
-      return '';
-    }
-  }
 
   @override
   void initState() {
@@ -103,9 +86,8 @@ class _AiChatPanelState extends State<AiChatPanel> {
   }
 
   Future<String> _getAiResponse(String userMessage) async {
-    // Używamy Groq API - super szybki!
-    const apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-    final apiKey = _getApiKey;
+    // Używamy proxy Cloudflare Worker
+    const apiUrl = 'https://groq-proxy.maciejjastrzebski2002.workers.dev/';
     
     // Budujemy kontekst z historią
     final messages = [
@@ -132,7 +114,6 @@ class _AiChatPanelState extends State<AiChatPanel> {
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $apiKey',
         },
         body: jsonEncode({
           'model': 'llama-3.3-70b-versatile',
@@ -149,10 +130,10 @@ class _AiChatPanelState extends State<AiChatPanel> {
           return content;
         }
       } else {
-        print('Groq API error: ${response.statusCode} - ${response.body}');
+        print('API error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      print('Groq API exception: $e');
+      print('API exception: $e');
       return _getSimpleResponse(userMessage);
     }
     
