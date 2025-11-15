@@ -318,9 +318,13 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
         },
         child: SafeArea(
           child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - 
+                    MediaQuery.of(context).padding.top - 
+                    MediaQuery.of(context).padding.bottom,
+              ),
+              child: IntrinsicHeight(
                 child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -626,7 +630,7 @@ class _WheelOfFortuneState extends State<WheelOfFortune>
                   ),
                 ),
             ],
-          ),
+                ),
               ),
             ),
           ),
